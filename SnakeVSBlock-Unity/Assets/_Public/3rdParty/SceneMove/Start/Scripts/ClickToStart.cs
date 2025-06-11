@@ -1,0 +1,136 @@
+﻿using UnityEngine;
+using TMPro;
+
+public class ClickToStart : MonoBehaviour
+{
+    public GameObject startScreenUI;
+    public PlusOrbSpawner orbSpawner;
+    public TMP_Text scoreText;
+    public TMP_Text stageNumberText;
+    public BlockDestroyManager destroyManager;
+    public GameInitializer initializer;
+
+    private SnakeFollowMouse playerSnake;
+    private bool hasStarted = false;
+    private float inputDelayTimer = 0f;
+    private const float inputDelayDuration = 0.3f;
+
+
+    private void Start()
+    {
+        if (initializer != null)
+        {
+            playerSnake = initializer.GetCurrentSnake();
+        }
+
+        if (startScreenUI != null)
+        {
+            startScreenUI.SetActive(true);
+        }
+
+        if (playerSnake != null)
+        {
+            playerSnake.canMove = false;
+        }
+
+        if (orbSpawner != null)
+        {
+            orbSpawner.canSpawn = false;
+        }
+
+        UpdateStageText();
+        UpdateScoreText();
+    }
+
+    private void Awake()
+    {
+        Time.timeScale = 0f;
+    }
+
+    private void Update()
+    {
+        if (!hasStarted)
+        {
+            inputDelayTimer -= Time.unscaledDeltaTime;
+
+            if (inputDelayTimer <= 0f && Input.GetMouseButtonDown(0))
+            {
+                TryAssignPlayerSnake(); // 念のため再取得（ゲームオーバー後の再生成対応）
+
+                hasStarted = true;
+                Time.timeScale = 1f;
+
+                if (playerSnake != null)
+                    playerSnake.canMove = true;
+
+                if (orbSpawner != null)
+                    orbSpawner.canSpawn = true;
+
+                if (startScreenUI != null)
+                    startScreenUI.SetActive(false);
+            }
+        }
+    }
+
+    private void UpdateScoreText()
+    {
+        if (destroyManager != null && scoreText != null)
+        {
+            scoreText.text = $"{destroyManager.GetTotalDestroyedHP()}";
+        }
+    }
+
+    private void UpdateStageText()
+    {
+        if (stageNumberText != null)
+        {
+            int stage = StageManager.Instance != null ? StageManager.Instance.GetCurrentStage() : 1;
+            stageNumberText.text = $"{stage}";
+        }
+    }
+
+    public void RestartStartScreen()
+    {
+
+        if (initializer != null)
+        {
+            playerSnake = initializer.GetCurrentSnake();
+        }
+
+        hasStarted = false;
+        inputDelayTimer = inputDelayDuration;
+
+        if (playerSnake != null)
+        {
+            playerSnake.canMove = false;
+        }
+
+        if (orbSpawner != null)
+        {
+            orbSpawner.canSpawn = false;
+        }
+
+        UpdateStageText();
+        UpdateScoreText();
+
+        if (startScreenUI != null)
+        {
+            startScreenUI.SetActive(true);
+        }
+
+        Time.timeScale = 0f;
+    }
+
+    private void TryAssignPlayerSnake()
+    {
+        if (initializer != null)
+        {
+            playerSnake = initializer.GetCurrentSnake();
+        }
+
+        if (playerSnake == null)
+        {
+            playerSnake = FindFirstObjectByType<SnakeFollowMouse>();
+        }
+    }
+}
