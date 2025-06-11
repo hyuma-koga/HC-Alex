@@ -4,7 +4,10 @@ public class ObstacleCollision : MonoBehaviour
 {
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (!other.CompareTag("HeadSprite")) return;
+        if (!other.CompareTag("HeadSprite"))
+        {
+            return;
+        }
 
         Rigidbody2D rb = other.attachedRigidbody;
         if (rb != null)
@@ -17,5 +20,4 @@ public class ObstacleCollision : MonoBehaviour
             rb.MovePosition(rb.position + (Vector2)(pushBack.normalized * 0.05f));
         }
     }
-
 }

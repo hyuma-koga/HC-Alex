@@ -7,6 +7,7 @@ public class GameInitializer : MonoBehaviour
     public PlusOrbSpawner orbSpawner;
     public BlockDestroyManager destroyManager;
     public Vector3 playerStartPos = new Vector3(0, 0, -5);
+    public SnakeFollowMouse GetCurrentSnake() => snake;
 
     public void ResetToStartState(bool isGameOver)
     {
@@ -24,12 +25,12 @@ public class GameInitializer : MonoBehaviour
 
         snake.ResetSnakePosition(playerStartPos);
 
-        if (isGameOver)
+        if (isGameOver) 
+        {
             destroyManager?.ResetScore();
-
+        }
+            
         blockSpawner?.ResetSpawner();
         orbSpawner?.ResetSpawner();
     }
-
-    public SnakeFollowMouse GetCurrentSnake() => snake;
 }

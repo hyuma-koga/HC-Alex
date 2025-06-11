@@ -8,7 +8,7 @@ public class BlockHP : MonoBehaviour
 
     private void Awake()
     {
-        controller = GetComponent<BlockController>(); // 初期値でもOK（なくてもSetControllerで上書きされる）
+        controller = GetComponent<BlockController>();
     }
 
     public void SetController(BlockController controller)
@@ -24,7 +24,10 @@ public class BlockHP : MonoBehaviour
     public void ReduceHP(int amount)
     {
         hp -= amount;
-        if (hp < 0) hp = 0;
+        if (hp < 0)
+        {
+            hp = 0;
+        }
 
         if (controller != null)
         {

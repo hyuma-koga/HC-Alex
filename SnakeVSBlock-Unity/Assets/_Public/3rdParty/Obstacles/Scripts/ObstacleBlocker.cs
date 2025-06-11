@@ -4,10 +4,16 @@ public class ObstacleBlocker : MonoBehaviour
 {
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (!other.CompareTag("HeadSprite")) return;
+        if (!other.CompareTag("HeadSprite"))
+        {
+            return;
+        }
 
         Rigidbody2D rb = other.attachedRigidbody;
-        if (rb == null || rb.bodyType != RigidbodyType2D.Dynamic) return;
+        if (rb == null || rb.bodyType != RigidbodyType2D.Dynamic)
+        {
+            return;
+        }
 
         Vector3 pushBack = other.transform.position - transform.position;
         pushBack.z = 0;

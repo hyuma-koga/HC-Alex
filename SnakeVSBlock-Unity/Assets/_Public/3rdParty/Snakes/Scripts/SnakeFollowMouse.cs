@@ -8,6 +8,7 @@ public class SnakeFollowMouse : MonoBehaviour
     public Transform tailRoot;
     public GameObject tailPrefab;
     public TextMeshPro snakeCountText;
+    public InvincibleManager invincibleManager;
 
     public int tailCount = 10;
     public float spacing = 0.4f;
@@ -25,13 +26,16 @@ public class SnakeFollowMouse : MonoBehaviour
     private bool isStoppedY = false;
     private BlockCollision currentBlock = null;
 
-    void OnEnable()
+    private float defaultMoveSpeed;
+    private float defaultScrollSpeed;
+
+    private void OnEnable()
     {
         // 再生成後にゲームオーバーフラグをリセット
         isGameOver = false;
     }
 
-    void Start()
+    private void Start()
     {
         segments.Clear(); // 念のため segments をリセット
 
@@ -41,10 +45,6 @@ public class SnakeFollowMouse : MonoBehaviour
             if (found != null)
             {
                 head = found;
-            }
-            else
-            {
-                Debug.LogWarning("HeadSprite が見つかりません！");
             }
         }
 
@@ -60,9 +60,18 @@ public class SnakeFollowMouse : MonoBehaviour
         UpdateSnakeCountUI(); // 初回表示も追加
     }
 
-    void Update()
+    private void Awake()
     {
-        if (!canMove || isGameOver) return;
+        defaultMoveSpeed = moveSpeed;
+        defaultScrollSpeed = yScrollSpeed;
+    }
+
+    private void Update()
+    {
+        if (!canMove || isGameOver)
+        {
+            return;
+        }
 
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         float yDelta = isStoppedY ? 0f : yScrollSpeed * Time.deltaTime;
@@ -166,7 +175,10 @@ public class SnakeFollowMouse : MonoBehaviour
 
     public void ClearAllTail()
     {
-        if (segments.Count <= 1) return;
+        if (segments.Count <= 1)
+        {
+            return;
+        }
 
         for (int i = segments.Count - 1; i >= 1; i--)
         {
@@ -182,7 +194,10 @@ public class SnakeFollowMouse : MonoBehaviour
 
     public void RecreateHead()
     {
-        if (head != null) return;
+        if (head != null)
+        {
+            return;
+        }
 
         var newHead = GameObject.Find("HeadSprite");
         if (newHead == null)
@@ -192,5 +207,22 @@ public class SnakeFollowMouse : MonoBehaviour
 
         head = newHead.transform;
         segments.Insert(0, head);
+    }
+
+    public void SetSpeedMultiplier(float multiplier)
+    {
+        moveSpeed = defaultMoveSpeed * multiplier;
+        yScrollSpeed = defaultScrollSpeed * multiplier;
+    }
+
+    public void ResetSpeed()
+    {
+        moveSpeed = defaultMoveSpeed;
+        yScrollSpeed = defaultScrollSpeed;
+    }
+
+    public List<Transform> GetAllSegments()
+    {
+        return new List<Transform>(segments);
     }
 }

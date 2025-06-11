@@ -3,13 +3,11 @@ using System.Collections;
 
 public class BlockCollision : MonoBehaviour
 {
+    public BlockDestroyManager destroyManager;
     private BlockHP blockHP;
     private Coroutine damageCoroutine;
     private SnakeFollowMouse currentSnake;
-
     private int initialBlockHP;
-
-    public BlockDestroyManager destroyManager;
 
     private void Start()
     {
@@ -51,7 +49,10 @@ public class BlockCollision : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (!other.CompareTag("HeadSprite")) return;
+        if (!other.CompareTag("HeadSprite"))
+        {
+            return;
+        }
 
         SnakeFollowMouse exitSnake = other.GetComponentInParent<SnakeFollowMouse>();
         if (exitSnake == currentSnake)
@@ -63,27 +64,71 @@ public class BlockCollision : MonoBehaviour
     private IEnumerator DamageOverTime(SnakeFollowMouse snake)
     {
         snake.StopScrollY();
+        bool isInvincible = snake.invincibleManager != null && snake.invincibleManager.IsInvincible;
+
+        if (isInvincible)
+        {
+            int currentHP = blockHP.GetHP();
+            blockHP.ReduceHP(currentHP);
+           
+            if (destroyManager != null)
+            {
+                destroyManager.AddDestroyedHP(currentHP);
+            }
+
+            if (TryGetComponent(out BlockStarTrigger starTrigger))
+            {
+                starTrigger.OnBlockDestroyed();
+            }
+
+            Destroy(gameObject);
+            snake.ResumeScrollY();
+            snake.ClearCurrentBlock(this);
+            damageCoroutine = null;
+            currentSnake = null;
+            yield break;
+        }
 
         while (snake.GetSegmentCount() > 0 && blockHP.GetHP() > 0)
         {
             snake.RemoveTail();
             blockHP.ReduceHP(1);
-
+           
             if (destroyManager != null)
             {
-                destroyManager.AddDestroyedHP(1); //削ったHPを即加算
+                destroyManager.AddDestroyedHP(1);
+            }
+
+            if (blockHP.GetHP() <= 0)
+            {
+                if (TryGetComponent(out BlockStarTrigger starTrigger))
+                {
+                    starTrigger.OnBlockDestroyed();
+                }
+
+                Destroy(gameObject);
+                break;
             }
 
             yield return new WaitForSeconds(0.1f);
         }
 
-        // HP0にならなくても終わる
         snake.ResumeScrollY();
         snake.ClearCurrentBlock(this);
         damageCoroutine = null;
         currentSnake = null;
-    }
 
+        if (blockHP.GetHP() <= 0)
+        {
+            
+            if (TryGetComponent(out BlockStarTrigger starTrigger))
+            {
+                starTrigger.OnBlockDestroyed();
+            }
+
+            Destroy(gameObject);
+        }
+    }
 
     public void ForceStopDamage()
     {

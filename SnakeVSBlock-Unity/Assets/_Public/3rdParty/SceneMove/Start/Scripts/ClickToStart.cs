@@ -15,7 +15,6 @@ public class ClickToStart : MonoBehaviour
     private float inputDelayTimer = 0f;
     private const float inputDelayDuration = 0.3f;
 
-
     private void Start()
     {
         if (initializer != null)
@@ -61,13 +60,19 @@ public class ClickToStart : MonoBehaviour
                 Time.timeScale = 1f;
 
                 if (playerSnake != null)
+                {
                     playerSnake.canMove = true;
-
+                }
+                   
                 if (orbSpawner != null)
+                {
                     orbSpawner.canSpawn = true;
-
+                }
+                  
                 if (startScreenUI != null)
+                {
                     startScreenUI.SetActive(false);
+                }
             }
         }
     }

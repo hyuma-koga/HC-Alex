@@ -4,7 +4,6 @@ using System;
 public class StageManager : MonoBehaviour
 {
     public static StageManager Instance { get; private set; }
-
     public event Action<int> OnStageChanged;
 
     private int currentStage = 1;
@@ -16,6 +15,7 @@ public class StageManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
         Instance = this;
     }
 

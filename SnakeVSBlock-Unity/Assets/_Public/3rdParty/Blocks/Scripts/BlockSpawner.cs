@@ -6,13 +6,18 @@ public class BlockSpawner : MonoBehaviour
     public GameObject blockPrefab;
     public Transform spawnRoot;
     public SnakeFollowMouse snake;
-    public BlockDestroyManager destroyManager; // ✅ インスペクターでアサイン
+    public BlockDestroyManager destroyManager;
 
     public float previewOffset = 10f;
     public float spawnYOffset = 8f;
     public float spawnSpacingY = 4f;
-    private float lastSpawnY;
 
+    [Header("スター無敵用設定")]
+    public float starBlockChance = 0.1f;
+    public GameObject starIconPrefab;
+    public InvincibleManager invincibleManager;
+
+    private float lastSpawnY;
     private readonly float[] xPositions = new float[] { -2.246f, -1.124f, 0f, 1.124f, 2.246f };
 
     private void Start()
@@ -25,13 +30,15 @@ public class BlockSpawner : MonoBehaviour
 
         lastSpawnY = snake.transform.position.y + spawnSpacingY;
         float spawnY = lastSpawnY + spawnYOffset;
-
         SpawnBlockRow(spawnY);
     }
 
     private void Update()
     {
-        if (snake == null) return;
+        if (snake == null)
+        {
+            return;
+        }
 
         float snakeY = snake.head.position.y;
 
@@ -68,6 +75,20 @@ public class BlockSpawner : MonoBehaviour
             Vector3 pos = new Vector3(xPositions[idx], spawnY, 0f);
             GameObject block = Instantiate(blockPrefab, pos, Quaternion.identity, spawnRoot);
 
+            //スター付きブロック生成
+            bool isStarBlock = Random.value < 0.1f;
+            if (isStarBlock)
+            {
+                GameObject starIcon = Instantiate(starIconPrefab, block.transform);
+                starIcon.transform.localPosition = new Vector3(0f, 0.6f, 0f);
+            }
+
+            if(block.TryGetComponent(out BlockStarTrigger starTrigger))
+            {
+                starTrigger.isStarBlock = isStarBlock;
+                starTrigger.invincibleManager = invincibleManager;
+            }
+
             int hp = (idx == passableIdx)
                 ? Random.Range(1, Mathf.Max(1, snakeCount))
                 : Random.Range(1, 32);
@@ -94,6 +115,7 @@ public class BlockSpawner : MonoBehaviour
             }
         }
     }
+
     public void ResetSpawner()
     {
         if (snake == null) return;

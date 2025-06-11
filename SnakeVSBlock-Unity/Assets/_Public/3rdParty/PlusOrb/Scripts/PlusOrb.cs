@@ -36,5 +36,4 @@ public class PlusOrb : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
 }

@@ -6,10 +6,16 @@ public class GoalTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.CompareTag("HeadSprite")) return;
+        if (!other.CompareTag("HeadSprite"))
+        {
+            return;
+        }
 
         SnakeFollowMouse snake = other.GetComponentInParent<SnakeFollowMouse>();
-        if (snake == null) return;
+        if (snake == null)
+        {
+            return;
+        }
 
         goalManager.OnPlayerReachedGoal();
     }

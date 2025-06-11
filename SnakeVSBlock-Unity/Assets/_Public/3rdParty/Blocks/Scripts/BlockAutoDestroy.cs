@@ -13,7 +13,10 @@ public class BlockAutoDestroy : MonoBehaviour
 
     void Update()
     {
-        if (!isAutoSpawned) return;
+        if (!isAutoSpawned)
+        {
+            return;
+        }
 
         float screenBottomY = mainCamera.transform.position.y - offsetBelowView;
 

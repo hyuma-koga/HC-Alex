@@ -47,7 +47,6 @@ public class BlockController : MonoBehaviour
         }
     }
 
-    // BlockHP ‚©‚çŒÄ‚Ño‚³‚ê‚éiŒ¸­‚Éj
     public void OnHPChanged()
     {
         UpdateHPDisplay();

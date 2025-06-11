@@ -102,6 +102,7 @@ GameObject:
   - component: {fileID: 4100639842876667898}
   - component: {fileID: 6595644532374491787}
   - component: {fileID: 8698541807407501752}
+  - component: {fileID: 3717263616308005633}
   m_Layer: 0
   m_Name: Block
   m_TagString: Block
@@ -237,6 +238,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hpText: {fileID: 7375965985775480325}
+--- !u!114 &3717263616308005633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3075329009282841042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29e2fc39dbcd66243847d38d2c7ad961, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isStarBlock: 0
+  invincibleManager: {fileID: 0}
 --- !u!1 &3965919275577603462
 GameObject:
   m_ObjectHideFlags: 0

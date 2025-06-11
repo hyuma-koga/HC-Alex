@@ -18,5 +18,4 @@ public class BlockDestroyManager : MonoBehaviour
     {
         totalDestroyedHP = 0;
     }
-
 }
