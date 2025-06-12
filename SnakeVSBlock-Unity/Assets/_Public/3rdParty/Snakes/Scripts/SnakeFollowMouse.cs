@@ -128,20 +128,25 @@ public class SnakeFollowMouse : MonoBehaviour
         UpdateSnakeCountUI();
     }
 
-
     public void RemoveTail()
     {
-        if (segments.Count > 0)
+        if (segments.Count > 1)
         {
             Transform last = segments[segments.Count - 1];
             segments.RemoveAt(segments.Count - 1);
             Destroy(last.gameObject);
             UpdateSnakeCountUI();
-
-            if (segments.Count == 0)
-            {
-                OnGameOver();
-            }
+            ScoreManager.Instance.AddScore(1);
+        }
+        else if (segments.Count == 1)
+        {
+            // Headを削る
+            Transform last = segments[0];
+            segments.RemoveAt(0);
+            Destroy(last.gameObject);
+            UpdateSnakeCountUI();
+            ScoreManager.Instance.AddScore(1);
+            OnGameOver();
         }
     }
 
@@ -173,7 +178,6 @@ public class SnakeFollowMouse : MonoBehaviour
         snakeCountText.text = segments.Count.ToString();
         snakeCountText.transform.position = head.position + new Vector3(0f, 0.5f, 0f);
     }
-
 
     public void SetCurrentBlock(BlockCollision block)
     {
@@ -249,7 +253,6 @@ public class SnakeFollowMouse : MonoBehaviour
         head = newHead.transform;
         head.position = new Vector3(0f, 0f, 0f);
 
-        //TextMeshProの再取得（null時のみ）
         if (snakeCountText == null)
         {
             snakeCountText = head.GetComponentInChildren<TextMeshPro>();
@@ -264,7 +267,6 @@ public class SnakeFollowMouse : MonoBehaviour
             segments.Insert(0, head);
         }
     }
-
 
     public void SetSpeedMultiplier(float multiplier)
     {
@@ -300,7 +302,6 @@ public class SnakeFollowMouse : MonoBehaviour
 
             if (head == null)
             {
-                Debug.LogError("HeadSprite が見つからず再生成できませんでした");
                 return;
             }
 
@@ -317,7 +318,6 @@ public class SnakeFollowMouse : MonoBehaviour
 
         ResetSnakePosition(pos);
         UpdateSnakeCountUI();
-        //1フレーム後にUI更新（head位置が確定してから）
         StartCoroutine(DelayUIUpdate());
     }
 

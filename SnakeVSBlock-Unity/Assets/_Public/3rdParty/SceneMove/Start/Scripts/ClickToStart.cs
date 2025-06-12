@@ -87,11 +87,12 @@ public class ClickToStart : MonoBehaviour
 
     private void UpdateScoreText()
     {
-        if (destroyManager != null && scoreText != null)
+        if (scoreText != null && ScoreManager.Instance != null)
         {
-            scoreText.text = $"{destroyManager.GetTotalDestroyedHP()}";
+            scoreText.text = $"{ScoreManager.Instance.TotalScore}";
         }
     }
+
 
     private void UpdateStageText()
     {

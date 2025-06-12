@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class GameOverManager : MonoBehaviour
@@ -6,11 +7,25 @@ public class GameOverManager : MonoBehaviour
     public GameInitializer initializer;
     public ClickToStart startScreen;
 
+    [Header("スコア表示UI")]
+    public TMP_Text scoreValueText;
+    public TMP_Text totalScoreValueText;
+
     private bool isGameOver = false;
 
     public void ShowGameOver()
     {
         isGameOver = true;
+
+        if(scoreValueText != null)
+        {
+            scoreValueText.text = ScoreManager.Instance.CurrentScore.ToString();
+        }
+
+        if(totalScoreValueText != null)
+        {
+            totalScoreValueText.text = ScoreManager.Instance.TotalScore.ToString();
+        }
 
         if(gameOverUI != null)
         {
@@ -32,6 +47,7 @@ public class GameOverManager : MonoBehaviour
                 gameOverUI.SetActive(false);
             }
 
+            ScoreManager.Instance.ResetCurrentScore();
             initializer.ResetToStartState(ResetReason.GameOver);
             startScreen?.RestartStartScreen();
         }

@@ -70,11 +70,13 @@ public class BlockCollision : MonoBehaviour
         {
             int currentHP = blockHP.GetHP();
             blockHP.ReduceHP(currentHP);
-           
+
             if (destroyManager != null)
             {
                 destroyManager.AddDestroyedHP(currentHP);
             }
+
+            ScoreManager.Instance.AddScore(currentHP);
 
             if (TryGetComponent(out BlockStarTrigger starTrigger))
             {
@@ -93,7 +95,7 @@ public class BlockCollision : MonoBehaviour
         {
             snake.RemoveTail();
             blockHP.ReduceHP(1);
-           
+
             if (destroyManager != null)
             {
                 destroyManager.AddDestroyedHP(1);
@@ -113,21 +115,11 @@ public class BlockCollision : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
 
+        // 後処理（Scroll再開など）
         snake.ResumeScrollY();
         snake.ClearCurrentBlock(this);
         damageCoroutine = null;
         currentSnake = null;
-
-        if (blockHP.GetHP() <= 0)
-        {
-            
-            if (TryGetComponent(out BlockStarTrigger starTrigger))
-            {
-                starTrigger.OnBlockDestroyed();
-            }
-
-            Destroy(gameObject);
-        }
     }
 
     public void ForceStopDamage()
