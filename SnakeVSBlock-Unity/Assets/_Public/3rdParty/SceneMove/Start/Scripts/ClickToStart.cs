@@ -55,27 +55,29 @@ public class ClickToStart : MonoBehaviour
 
             if (inputDelayTimer <= 0f && Input.GetMouseButtonDown(0))
             {
-                TryAssignPlayerSnake(); // 念のため再取得（ゲームオーバー後の再生成対応）
+                TryAssignPlayerSnake();
+
+                if (playerSnake == null)
+                {
+                    return;
+                }
 
                 hasStarted = true;
                 Time.timeScale = 1f;
 
-                if (playerSnake != null)
-                {
-                    playerSnake.canMove = true;
-                }
-                   
+                playerSnake.canMove = true;
+
                 if (orbSpawner != null)
                 {
                     orbSpawner.canSpawn = true;
                 }
-                  
+
                 if (startScreenUI != null)
                 {
                     startScreenUI.SetActive(false);
                 }
 
-                if(wallSpawner != null)
+                if (wallSpawner != null)
                 {
                     wallSpawner.ResetWalls();
                 }
@@ -102,11 +104,10 @@ public class ClickToStart : MonoBehaviour
 
     public void RestartStartScreen()
     {
-
         if (initializer != null)
         {
-            playerSnake = initializer.GetCurrentSnake();
-            initializer.ResetSnakePosition();
+            initializer.ResetToStartState(ResetReason.Restart); // ✅ GameOver以外のときは Restart 扱い
+            TryAssignPlayerSnake();
         }
 
         hasStarted = false;

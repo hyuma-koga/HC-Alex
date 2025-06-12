@@ -51,7 +51,7 @@ public class GoalManager : MonoBehaviour
                
             if (initializer != null) 
             {
-                initializer.ResetToStartState(false);
+                initializer.ResetToStartState(ResetReason.GameClear);
             }
                
             if (clickToStart != null)

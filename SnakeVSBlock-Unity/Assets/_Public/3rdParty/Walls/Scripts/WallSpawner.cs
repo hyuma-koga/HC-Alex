@@ -16,7 +16,7 @@ public class WallSpawner : MonoBehaviour
 
     private void Start()
     {
-        if (snake == null)
+        if (snake == null || snake.head == null)
         {
             Debug.LogWarning("Snake が未設定のため WallSpawner を無効化します");
             enabled = false;
@@ -30,7 +30,10 @@ public class WallSpawner : MonoBehaviour
 
     private void Update()
     {
-        if (snake == null) return;
+        if (snake == null || snake.head == null)
+        {
+            return; //head が破棄されていたら早期リターン
+        }
 
         float snakeY = snake.head.position.y;
         float nextSpawnY = lastSpawnY + spawnSpacingY;
@@ -38,7 +41,7 @@ public class WallSpawner : MonoBehaviour
         if ((snakeY + previewOffset) >= nextSpawnY && nextSpawnY < maxY)
         {
             SpawnWallRow(nextSpawnY);
-            lastSpawnY = nextSpawnY; // ← ★ ここで正しく進めていく
+            lastSpawnY = nextSpawnY; //ここで正しく進めていく
         }
     }
 

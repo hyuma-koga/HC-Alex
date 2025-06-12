@@ -9,6 +9,7 @@ public class SnakeFollowMouse : MonoBehaviour
     public GameObject tailPrefab;
     public TextMeshPro snakeCountText;
     public InvincibleManager invincibleManager;
+    public GameObject headPrefab;
 
     public int tailCount = 10;
     public float spacing = 0.4f;
@@ -37,7 +38,7 @@ public class SnakeFollowMouse : MonoBehaviour
 
     private void Start()
     {
-        segments.Clear(); // 念のため segments をリセット
+        segments.Clear(); //念のため segments をリセット
 
         if (head == null)
         {
@@ -68,7 +69,10 @@ public class SnakeFollowMouse : MonoBehaviour
 
     private void Update()
     {
-        if (!canMove || isGameOver) return;
+        if (!canMove || isGameOver)
+        {
+            return;
+        }
 
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         float yDelta = isStoppedY ? 0f : yScrollSpeed * Time.deltaTime;
@@ -82,17 +86,17 @@ public class SnakeFollowMouse : MonoBehaviour
         Vector3 proposedMove = intendedPos - head.position;
         Vector3 nextPos = head.position;
 
-        // 個別にX, Yの動きについて判定
+        //個別にX, Yの動きについて判定
         Vector3 xMove = new Vector3(proposedMove.x, 0, 0);
         Vector3 yMove = new Vector3(0, proposedMove.y, 0);
 
-        // X方向に壁がなければ移動
+        //X方向に壁がなければ移動
         if (!IsWallInFront(head.position + xMove))
         {
             nextPos += xMove;
         }
 
-        // Y方向に壁がなければ移動（通常はtrue）
+        //Y方向に壁がなければ移動（通常はtrue）
         if (!IsWallInFront(head.position + yMove))
         {
             nextPos += yMove;
@@ -100,7 +104,7 @@ public class SnakeFollowMouse : MonoBehaviour
 
         head.position = Vector3.Lerp(head.position, nextPos, moveSpeed * Time.deltaTime);
 
-        // tail追従
+        //tail追従
         for (int i = 1; i < segments.Count; i++)
         {
             Transform prev = segments[i - 1];
@@ -121,7 +125,9 @@ public class SnakeFollowMouse : MonoBehaviour
         Vector3 newPos = new Vector3(head.position.x, y, 0f);
         GameObject newTail = Instantiate(tailPrefab, newPos, Quaternion.identity, tailRoot);
         segments.Add(newTail.transform);
+        UpdateSnakeCountUI();
     }
+
 
     public void RemoveTail()
     {
@@ -145,6 +151,7 @@ public class SnakeFollowMouse : MonoBehaviour
         canMove = false;
 
         var gm = FindFirstObjectByType<GameOverManager>();
+
         if (gm != null)
         {
             gm.ShowGameOver();
@@ -153,13 +160,20 @@ public class SnakeFollowMouse : MonoBehaviour
 
     private void UpdateSnakeCountUI()
     {
-        if (snakeCountText != null && head != null)
+        if (snakeCountText == null)
         {
-            snakeCountText.text = segments.Count.ToString();
-            Vector3 offset = new Vector3(0f, 0.5f, 0f);
-            snakeCountText.transform.position = head.position + offset;
+            return;
         }
+
+        if (head == null)
+        {
+            return;
+        }
+
+        snakeCountText.text = segments.Count.ToString();
+        snakeCountText.transform.position = head.position + new Vector3(0f, 0.5f, 0f);
     }
+
 
     public void SetCurrentBlock(BlockCollision block)
     {
@@ -167,6 +181,7 @@ public class SnakeFollowMouse : MonoBehaviour
         {
             currentBlock.ForceStopDamage();
         }
+
         currentBlock = block;
     }
 
@@ -217,15 +232,39 @@ public class SnakeFollowMouse : MonoBehaviour
             return;
         }
 
-        var newHead = GameObject.Find("HeadSprite");
+        GameObject newHead = GameObject.Find("HeadSprite");
+
+        if (newHead == null && headPrefab != null)
+        {
+            Vector3 safeStartPos = new Vector3(0f, 0f, 0f);
+            newHead = Instantiate(headPrefab, safeStartPos, Quaternion.identity, transform);
+            newHead.name = "HeadSprite";
+        }
+
         if (newHead == null)
         {
             return;
         }
 
         head = newHead.transform;
-        segments.Insert(0, head);
+        head.position = new Vector3(0f, 0f, 0f);
+
+        //TextMeshProの再取得（null時のみ）
+        if (snakeCountText == null)
+        {
+            snakeCountText = head.GetComponentInChildren<TextMeshPro>();
+        }
+
+        if (segments.Count == 0)
+        {
+            segments.Add(head);
+        }
+        else if (segments[0] != head)
+        {
+            segments.Insert(0, head);
+        }
     }
+
 
     public void SetSpeedMultiplier(float multiplier)
     {
@@ -249,9 +288,47 @@ public class SnakeFollowMouse : MonoBehaviour
         Vector2 origin = head.position;
         Vector2 direction = (targetPos - head.position).normalized;
         float distance = Vector2.Distance(origin, targetPos);
-
         RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance, LayerMask.GetMask("Wall"));
         return hit.collider != null;
     }
 
+    public void ResetState(ResetReason reason, Vector3 pos)
+    {
+        if (reason == ResetReason.GameOver)
+        {
+            RecreateHead();
+
+            if (head == null)
+            {
+                Debug.LogError("HeadSprite が見つからず再生成できませんでした");
+                return;
+            }
+
+            ClearAllTail();
+
+            for (int i = 0; i < 9; i++) // HP10
+            {
+                AddTail();
+            }
+
+            UpdateSnakeCountUI();
+            isGameOver = false;
+        }
+
+        ResetSnakePosition(pos);
+        UpdateSnakeCountUI();
+        //1フレーム後にUI更新（head位置が確定してから）
+        StartCoroutine(DelayUIUpdate());
+    }
+
+    private System.Collections.IEnumerator DelayUIUpdate()
+    {
+        yield return null;
+        UpdateSnakeCountUI();
+    }
+
+    public void ForceUpdateSnakeCountUI()
+    {
+        UpdateSnakeCountUI();
+    }
 }

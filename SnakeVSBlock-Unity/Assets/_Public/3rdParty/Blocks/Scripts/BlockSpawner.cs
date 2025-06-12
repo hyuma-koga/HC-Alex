@@ -22,20 +22,22 @@ public class BlockSpawner : MonoBehaviour
 
     private void Start()
     {
-        if (snake == null)
+        //初回のブロック生成
+        if (snake != null && snake.head != null)
+        {
+            lastSpawnY = snake.transform.position.y + spawnSpacingY;
+            float spawnY = lastSpawnY + spawnYOffset;
+            SpawnBlockRow(spawnY);
+        }
+        else
         {
             enabled = false;
-            return;
         }
-
-        lastSpawnY = snake.transform.position.y + spawnSpacingY;
-        float spawnY = lastSpawnY + spawnYOffset;
-        SpawnBlockRow(spawnY);
     }
 
     private void Update()
     {
-        if (snake == null)
+        if (snake == null || snake.head == null)
         {
             return;
         }
@@ -80,10 +82,10 @@ public class BlockSpawner : MonoBehaviour
             if (isStarBlock)
             {
                 GameObject starIcon = Instantiate(starIconPrefab, block.transform);
-                starIcon.transform.localPosition = new Vector3(0f, 0.6f, 0f);
+                starIcon.transform.localPosition = new Vector3(0f, -0.27f, -0.1f);
             }
 
-            if(block.TryGetComponent(out BlockStarTrigger starTrigger))
+            if (block.TryGetComponent(out BlockStarTrigger starTrigger))
             {
                 starTrigger.isStarBlock = isStarBlock;
                 starTrigger.invincibleManager = invincibleManager;
@@ -103,7 +105,7 @@ public class BlockSpawner : MonoBehaviour
                 blockCollision.SetInitialHP(hp);
                 blockCollision.destroyManager = destroyManager;
             }
-        
+
             if (block.TryGetComponent(out BlockController controller))
             {
                 controller.UpdateHPDisplay();
@@ -118,10 +120,32 @@ public class BlockSpawner : MonoBehaviour
 
     public void ResetSpawner()
     {
-        if (snake == null) return;
+        if (snake == null || snake.head == null)
+        {
+            return;
+        }
 
-        lastSpawnY = snake.transform.position.y + spawnSpacingY;
+        //一度すべてのブロックを削除
+        ClearAllBlocks();
+
+        //新しい Snake の位置を基準に再設定
+        lastSpawnY = snake.head.position.y + spawnSpacingY;
         float spawnY = lastSpawnY + spawnYOffset;
+
+        //最初のブロック列を再生成
         SpawnBlockRow(spawnY);
+    }
+
+    public void ClearAllBlocks()
+    {
+        if (spawnRoot == null)
+        {
+            return;
+        }
+
+        foreach (Transform child in spawnRoot)
+        {
+            Destroy(child.gameObject);
+        }
     }
 }

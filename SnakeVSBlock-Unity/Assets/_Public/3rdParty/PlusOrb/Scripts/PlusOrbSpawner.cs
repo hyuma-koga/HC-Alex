@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class PlusOrbSpawner : MonoBehaviour
 {
@@ -16,10 +16,12 @@ public class PlusOrbSpawner : MonoBehaviour
 
     private void Start()
     {
+        //SnakeFollowMouse のインスタンスを取得
         SnakeFollowMouse snake = FindFirstObjectByType<SnakeFollowMouse>();
+
         if (snake != null && snake.head != null)
         {
-            playerHead = snake.head;
+            playerHead = snake.head; //新しいプレイヤーのHeadを参照
             nextSpawnY = Mathf.Floor(playerHead.position.y / spawnSpacing) * spawnSpacing + spawnSpacing;
         }
     }
@@ -56,7 +58,7 @@ public class PlusOrbSpawner : MonoBehaviour
         spawnedYSet.Add(roundedY);
         int orbCount = Random.value < 0.8f ? Random.Range(1, 3) : Random.Range(3, maxPerLine + 1);
         List<int> availableIndices = new List<int>() { 0, 1, 2, 3, 4 };
-        
+
         for (int i = 0; i < orbCount && availableIndices.Count > 0; i++)
         {
             int randIndex = Random.Range(0, availableIndices.Count);
@@ -69,11 +71,15 @@ public class PlusOrbSpawner : MonoBehaviour
 
     public void ResetSpawner()
     {
-        if (playerHead == null)
+        //snakeの再取得
+        SnakeFollowMouse snake = FindFirstObjectByType<SnakeFollowMouse>();
+
+        if (snake == null || snake.head == null)
         {
             return;
         }
 
+        playerHead = snake.head;  //新しいSnakeのheadに更新
         spawnedYSet.Clear();
         nextSpawnY = Mathf.Floor(playerHead.position.y / spawnSpacing) * spawnSpacing + spawnSpacing;
     }

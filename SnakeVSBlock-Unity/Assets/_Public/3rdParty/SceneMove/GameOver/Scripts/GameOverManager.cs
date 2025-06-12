@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class GameOverManager : MonoBehaviour
 {
+    public GameObject gameOverUI;
     public GameInitializer initializer;
     public ClickToStart startScreen;
 
@@ -10,6 +11,13 @@ public class GameOverManager : MonoBehaviour
     public void ShowGameOver()
     {
         isGameOver = true;
+
+        if(gameOverUI != null)
+        {
+            gameOverUI.SetActive(true);
+        }
+
+        Time.timeScale = 0f;
     }
 
     private void Update()
@@ -17,8 +25,14 @@ public class GameOverManager : MonoBehaviour
         if (isGameOver && Input.GetMouseButtonDown(0))
         {
             isGameOver = false;
+            Time.timeScale = 1f;
 
-            initializer?.ResetToStartState(true); // Snakeの位置とTailのみリセット
+            if(gameOverUI != null)
+            {
+                gameOverUI.SetActive(false);
+            }
+
+            initializer.ResetToStartState(ResetReason.GameOver);
             startScreen?.RestartStartScreen();
         }
     }

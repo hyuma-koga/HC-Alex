@@ -14,7 +14,6 @@ public class CleanupObjects : MonoBehaviour
             {
                 if (obj.transform.position.y > yLimit)
                 {
-                    Debug.Log($"[{tag}] {obj.name} ‚ğ©“®íœiY={obj.transform.position.y}j");
                     Destroy(obj);
                 }
             }
