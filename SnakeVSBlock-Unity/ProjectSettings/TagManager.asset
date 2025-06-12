@@ -8,11 +8,12 @@ TagManager:
   - Block
   - Snake
   - PlusOrb
+  - Wall
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Wall
   - Water
   - UI
   - Obstacle

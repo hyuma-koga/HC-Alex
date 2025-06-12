@@ -68,22 +68,39 @@ public class SnakeFollowMouse : MonoBehaviour
 
     private void Update()
     {
-        if (!canMove || isGameOver)
-        {
-            return;
-        }
+        if (!canMove || isGameOver) return;
 
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         float yDelta = isStoppedY ? 0f : yScrollSpeed * Time.deltaTime;
 
-        Vector3 targetPos = new Vector3(
+        Vector3 intendedPos = new Vector3(
             Mathf.Clamp(mousePos.x, -2.88f, 2.88f),
             head.position.y + yDelta,
             0f
         );
 
-        head.position = Vector3.Lerp(head.position, targetPos, moveSpeed * Time.deltaTime);
+        Vector3 proposedMove = intendedPos - head.position;
+        Vector3 nextPos = head.position;
 
+        // 個別にX, Yの動きについて判定
+        Vector3 xMove = new Vector3(proposedMove.x, 0, 0);
+        Vector3 yMove = new Vector3(0, proposedMove.y, 0);
+
+        // X方向に壁がなければ移動
+        if (!IsWallInFront(head.position + xMove))
+        {
+            nextPos += xMove;
+        }
+
+        // Y方向に壁がなければ移動（通常はtrue）
+        if (!IsWallInFront(head.position + yMove))
+        {
+            nextPos += yMove;
+        }
+
+        head.position = Vector3.Lerp(head.position, nextPos, moveSpeed * Time.deltaTime);
+
+        // tail追従
         for (int i = 1; i < segments.Count; i++)
         {
             Transform prev = segments[i - 1];
@@ -95,6 +112,7 @@ public class SnakeFollowMouse : MonoBehaviour
 
         UpdateSnakeCountUI();
     }
+
 
     public void AddTail()
     {
@@ -225,4 +243,15 @@ public class SnakeFollowMouse : MonoBehaviour
     {
         return new List<Transform>(segments);
     }
+
+    private bool IsWallInFront(Vector3 targetPos)
+    {
+        Vector2 origin = head.position;
+        Vector2 direction = (targetPos - head.position).normalized;
+        float distance = Vector2.Distance(origin, targetPos);
+
+        RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance, LayerMask.GetMask("Wall"));
+        return hit.collider != null;
+    }
+
 }

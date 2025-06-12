@@ -524,11 +524,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &167207370 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 4241447721332738116, guid: fb6db5b254627a34bb514172f9355fb9, type: 3}
-  m_PrefabInstance: {fileID: 2991486735606615653}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &202696957
 GameObject:
   m_ObjectHideFlags: 0
@@ -1224,6 +1219,7 @@ MonoBehaviour:
   targetTags:
   - Block
   - PlusOrb
+  - Wall
 --- !u!4 &530950435
 Transform:
   m_ObjectHideFlags: 0
@@ -1385,6 +1381,8 @@ GameObject:
   m_Component:
   - component: {fileID: 561543349}
   - component: {fileID: 561543350}
+  - component: {fileID: 561543351}
+  - component: {fileID: 561543352}
   m_Layer: 0
   m_Name: SnakeHead
   m_TagString: HeadSprite
@@ -1431,7 +1429,69 @@ MonoBehaviour:
   moveSpeed: 120
   yScrollSpeed: 10
   canMove: 0
-  tailParts: []
+--- !u!50 &561543351
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 561543348}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!58 &561543352
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 561543348}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 0.24
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -2282,7 +2342,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   snakeMovement: {fileID: 561543350}
-  snakeRenderer: {fileID: 167207370}
   rainbowColors:
   - {r: 1, g: 0.99520075, b: 0, a: 1}
   - {r: 1, g: 1, b: 1, a: 1}
@@ -3085,6 +3144,53 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1424432613
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1424432615}
+  - component: {fileID: 1424432614}
+  m_Layer: 0
+  m_Name: WallManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1424432614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424432613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e4ad650e5b16b9478795ce01171fb0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wallPrefab: {fileID: 4363599430637273048, guid: f3d0f4ed801319c419805ac92e96a967, type: 3}
+  startY: 10
+  maxRows: 20
+--- !u!4 &1424432615
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424432613}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.901622, y: 7.1452484, z: -0.042885415}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1448788988
 GameObject:
   m_ObjectHideFlags: 0
@@ -4268,13 +4374,15 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1360401127}
+  - {fileID: 166223009}
+  - {fileID: 705854797}
+  - {fileID: 1150939549}
+  - {fileID: 1478453284}
   - {fileID: 530950435}
   - {fileID: 135427015}
   - {fileID: 1216418433}
-  - {fileID: 1360401127}
-  - {fileID: 166223009}
-  - {fileID: 1478453284}
-  - {fileID: 705854797}
+  - {fileID: 1424432615}
   - {fileID: 519420032}
   - {fileID: 21890421}
   - {fileID: 619394802}
@@ -4283,4 +4391,3 @@ SceneRoots:
   - {fileID: 2478051322387018731}
   - {fileID: 2991486735606615653}
   - {fileID: 1453234644}
-  - {fileID: 1150939549}

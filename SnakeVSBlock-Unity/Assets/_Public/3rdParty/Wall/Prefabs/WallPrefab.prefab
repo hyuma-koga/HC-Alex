@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7071362815037617253}
-  m_Layer: 0
-  m_Name: Obstacle
-  m_TagString: Untagged
+  m_Layer: 3
+  m_Name: WallPrefab
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26,7 +26,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.14, y: 0.4, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 985116527399127204}
@@ -43,10 +43,9 @@ GameObject:
   - component: {fileID: 985116527399127204}
   - component: {fileID: 6715036099131848919}
   - component: {fileID: 7569480671139332780}
-  - component: {fileID: 7098522987189228810}
-  m_Layer: 0
-  m_Name: ObstacleSprite
-  m_TagString: Untagged
+  m_Layer: 3
+  m_Name: WallSprite
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -61,7 +60,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -1.821, y: -0.502, z: 0}
-  m_LocalScale: {x: 0.86, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7071362815037617253}
@@ -131,11 +130,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1586412815278559423, guid: 1768acfdfd4223341ba95385064af5b1, type: 3}
       propertyPath: m_Name
-      value: ObstacleSprite
+      value: WallSprite
+      objectReference: {fileID: 0}
+    - target: {fileID: 1586412815278559423, guid: 1768acfdfd4223341ba95385064af5b1, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1586412815278559423, guid: 1768acfdfd4223341ba95385064af5b1, type: 3}
+      propertyPath: m_TagString
+      value: Wall
       objectReference: {fileID: 0}
     - target: {fileID: 6592538240159720288, guid: 1768acfdfd4223341ba95385064af5b1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2.43
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6592538240159720288, guid: 1768acfdfd4223341ba95385064af5b1, type: 3}
       propertyPath: m_LocalScale.y
@@ -200,9 +207,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1586412815278559423, guid: 1768acfdfd4223341ba95385064af5b1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7569480671139332780}
-    - targetCorrespondingSourceObject: {fileID: 1586412815278559423, guid: 1768acfdfd4223341ba95385064af5b1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7098522987189228810}
   m_SourcePrefab: {fileID: 100100000, guid: 1768acfdfd4223341ba95385064af5b1, type: 3}
 --- !u!70 &7569480671139332780
 CapsuleCollider2D:
@@ -239,32 +243,5 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0.26}
-  m_Size: {x: 16.03, y: 18.35}
+  m_Size: {x: 3.11, y: 8.13}
   m_Direction: 0
---- !u!50 &7098522987189228810
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6427815596607198276}
-  m_BodyType: 2
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
