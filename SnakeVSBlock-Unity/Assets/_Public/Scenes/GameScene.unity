@@ -509,6 +509,7 @@ MonoBehaviour:
   destroyManager: {fileID: 135427014}
   initializer: {fileID: 1478453283}
   clickToStart: {fileID: 1360401126}
+  WallSpawner: {fileID: 1424432614}
 --- !u!4 &166223009
 Transform:
   m_ObjectHideFlags: 0
@@ -2992,6 +2993,7 @@ MonoBehaviour:
   stageNumberText: {fileID: 1171153608}
   destroyManager: {fileID: 135427014}
   initializer: {fileID: 1478453283}
+  wallSpawner: {fileID: 1424432614}
 --- !u!4 &1360401127
 Transform:
   m_ObjectHideFlags: 0
@@ -3174,8 +3176,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wallPrefab: {fileID: 4363599430637273048, guid: f3d0f4ed801319c419805ac92e96a967, type: 3}
-  startY: 10
-  maxRows: 20
+  previewOffset: 10
+  spawnYOffset: 10
+  spawnSpacingY: 8
+  maxY: 100
+  snake: {fileID: 561543350}
 --- !u!4 &1424432615
 Transform:
   m_ObjectHideFlags: 0
@@ -3588,6 +3593,7 @@ MonoBehaviour:
   snake: {fileID: 561543350}
   blockSpawner: {fileID: 1386329803}
   orbSpawner: {fileID: 2478051322387018733}
+  wallSpawner: {fileID: 1424432614}
   destroyManager: {fileID: 135427014}
   playerStartPos: {x: 0, y: 0, z: -5}
 --- !u!4 &1478453284

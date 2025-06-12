@@ -9,6 +9,7 @@ public class ClickToStart : MonoBehaviour
     public TMP_Text stageNumberText;
     public BlockDestroyManager destroyManager;
     public GameInitializer initializer;
+    public WallSpawner wallSpawner;
 
     private SnakeFollowMouse playerSnake;
     private bool hasStarted = false;
@@ -73,6 +74,11 @@ public class ClickToStart : MonoBehaviour
                 {
                     startScreenUI.SetActive(false);
                 }
+
+                if(wallSpawner != null)
+                {
+                    wallSpawner.ResetWalls();
+                }
             }
         }
     }
@@ -100,6 +106,7 @@ public class ClickToStart : MonoBehaviour
         if (initializer != null)
         {
             playerSnake = initializer.GetCurrentSnake();
+            initializer.ResetSnakePosition();
         }
 
         hasStarted = false;

@@ -3,7 +3,7 @@ using UnityEngine;
 public class CleanupObjects : MonoBehaviour
 {
     public float yLimit = 100f;
-    public string[] targetTags = { "Block", "PlusOrb" };
+    public string[] targetTags = { "Block", "PlusOrb" ,"Wall"};
 
     void Start()
     {

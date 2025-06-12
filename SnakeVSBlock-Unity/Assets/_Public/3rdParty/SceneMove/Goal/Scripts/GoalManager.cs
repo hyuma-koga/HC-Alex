@@ -9,6 +9,7 @@ public class GoalManager : MonoBehaviour
     public BlockDestroyManager destroyManager;
     public GameInitializer initializer;
     public ClickToStart clickToStart;
+    public WallSpawner WallSpawner;
 
     private bool isGoalReached = false;
 
@@ -24,6 +25,11 @@ public class GoalManager : MonoBehaviour
         {
             int currentStage = StageManager.Instance.GetCurrentStage();
             stageClearText.text = $"{currentStage}";
+        }
+
+        if (WallSpawner != null)
+        {
+            WallSpawner.ClearWallsOnly();
         }
 
         Time.timeScale = 0f;
