@@ -38,11 +38,6 @@ public class StageProgressController : MonoBehaviour
          if (fillBar != null)
          {
              fillBar.fillAmount = progress;
-             Debug.Log($"[StageProgressController] fillAmount = {progress}");
-         }
-         else
-         {
-             Debug.LogWarning("fillBar Ç™ null Ç≈Ç∑ÅI");
          }
     }
 
