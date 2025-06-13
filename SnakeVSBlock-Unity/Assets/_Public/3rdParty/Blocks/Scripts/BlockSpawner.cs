@@ -18,7 +18,7 @@ public class BlockSpawner : MonoBehaviour
     public InvincibleManager invincibleManager;
 
     private float lastSpawnY;
-    private readonly float[] xPositions = new float[] { -2.246f, -1.124f, 0f, 1.124f, 2.246f };
+    private readonly float[] xPositions = new float[] { -2.248f, -1.124f, 0f, 1.124f, 2.248f };
 
     private void Start()
     {

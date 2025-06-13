@@ -93,7 +93,6 @@ public class ClickToStart : MonoBehaviour
         }
     }
 
-
     private void UpdateStageText()
     {
         if (stageNumberText != null)

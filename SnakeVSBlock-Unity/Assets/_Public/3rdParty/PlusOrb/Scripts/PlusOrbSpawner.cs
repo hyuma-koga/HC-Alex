@@ -11,7 +11,7 @@ public class PlusOrbSpawner : MonoBehaviour
 
     private Transform playerHead;
     private float nextSpawnY;
-    private readonly float[] fixedXPositions = { -1.92f, -0.96f, 0f, 0.96f, 1.92f };
+    private readonly float[] fixedXPositions = {-2.248f, -1.124f, 0f, 1.124f, 2.248f};
     private static HashSet<float> spawnedYSet = new HashSet<float>();
 
     private void Start()

@@ -10,7 +10,10 @@ public class BlockScoreUIUpdater : MonoBehaviour
 
     private void Update()
     {
-        if (destroyManager == null) return;
+        if (destroyManager == null)
+        {
+            return;
+        }
 
         int currentScore = destroyManager.GetTotalDestroyedHP();
 

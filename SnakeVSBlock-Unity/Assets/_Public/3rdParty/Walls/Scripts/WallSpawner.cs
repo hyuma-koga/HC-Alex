@@ -11,7 +11,7 @@ public class WallSpawner : MonoBehaviour
     [SerializeField] private SnakeFollowMouse snake;
 
     private float lastSpawnY;
-    private readonly float[] possibleX = { -1.728f, -0.576f, 0.576f, 1.728f };
+    private readonly float[] possibleX = { -1.57f, -0.5f, 0.68f, 1.8f };
     private List<GameObject> spawnedWalls = new List<GameObject>();
 
     private void Start()
@@ -75,9 +75,12 @@ public class WallSpawner : MonoBehaviour
         // ëSçÌèú
         foreach (var wall in spawnedWalls)
         {
-            if (wall != null)
+            if (wall != null) 
+            {
                 Destroy(wall);
+            }
         }
+
         spawnedWalls.Clear();
 
         if (snake != null)
@@ -92,8 +95,10 @@ public class WallSpawner : MonoBehaviour
     {
         foreach (var wall in spawnedWalls)
         {
-            if (wall != null)
+            if (wall != null) 
+            {
                 Destroy(wall);
+            }
         }
         spawnedWalls.Clear();
     }
@@ -102,8 +107,10 @@ public class WallSpawner : MonoBehaviour
     {
         foreach (var wall in spawnedWalls)
         {
-            if (wall != null)
+            if (wall != null) 
+            {
                 wall.SetActive(false);
+            }
         }
     }
 }

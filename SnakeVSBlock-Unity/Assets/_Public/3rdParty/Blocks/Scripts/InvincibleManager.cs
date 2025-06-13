@@ -61,8 +61,11 @@ public class InvincibleManager : MonoBehaviour
         foreach (Transform segment in snakeMovement.GetAllSegments())
         {
             var sr = segment.GetComponentInChildren<SpriteRenderer>();
-            if (sr != null)
+           
+            if (sr != null) 
+            {
                 sr.color = color;
+            } 
         }
     }
 
@@ -71,8 +74,11 @@ public class InvincibleManager : MonoBehaviour
         foreach (Transform segment in snakeMovement.GetAllSegments())
         {
             var sr = segment.GetComponentInChildren<SpriteRenderer>();
-            if (sr != null)
+            
+            if (sr != null) 
+            {
                 sr.color = restoreColor;
+            }
         }
     }
 }

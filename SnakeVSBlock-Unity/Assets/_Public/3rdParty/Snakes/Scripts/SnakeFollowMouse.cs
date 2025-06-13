@@ -4,6 +4,11 @@ using TMPro;
 
 public class SnakeFollowMouse : MonoBehaviour
 {
+    public static SnakeFollowMouse Instance { get; private set; }
+
+    [SerializeField] private StageProgressController progressController;
+    [SerializeField] private StageProgressByDistance progressByDistance;
+
     public Transform head;
     public Transform tailRoot;
     public GameObject tailPrefab;
@@ -30,19 +35,32 @@ public class SnakeFollowMouse : MonoBehaviour
     private float defaultMoveSpeed;
     private float defaultScrollSpeed;
 
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        defaultMoveSpeed = moveSpeed;
+        defaultScrollSpeed = yScrollSpeed;
+    }
+
     private void OnEnable()
     {
-        // 再生成後にゲームオーバーフラグをリセット
         isGameOver = false;
     }
 
     private void Start()
     {
-        segments.Clear(); //念のため segments をリセット
+        segments.Clear();
 
         if (head == null)
         {
             var found = transform.Find("HeadSprite");
+
             if (found != null)
             {
                 head = found;
@@ -58,13 +76,7 @@ public class SnakeFollowMouse : MonoBehaviour
             segments.Add(tail.transform);
         }
 
-        UpdateSnakeCountUI(); // 初回表示も追加
-    }
-
-    private void Awake()
-    {
-        defaultMoveSpeed = moveSpeed;
-        defaultScrollSpeed = yScrollSpeed;
+        UpdateSnakeCountUI();
     }
 
     private void Update()
@@ -85,18 +97,14 @@ public class SnakeFollowMouse : MonoBehaviour
 
         Vector3 proposedMove = intendedPos - head.position;
         Vector3 nextPos = head.position;
-
-        //個別にX, Yの動きについて判定
         Vector3 xMove = new Vector3(proposedMove.x, 0, 0);
         Vector3 yMove = new Vector3(0, proposedMove.y, 0);
 
-        //X方向に壁がなければ移動
         if (!IsWallInFront(head.position + xMove))
         {
             nextPos += xMove;
         }
 
-        //Y方向に壁がなければ移動（通常はtrue）
         if (!IsWallInFront(head.position + yMove))
         {
             nextPos += yMove;
@@ -104,7 +112,6 @@ public class SnakeFollowMouse : MonoBehaviour
 
         head.position = Vector3.Lerp(head.position, nextPos, moveSpeed * Time.deltaTime);
 
-        //tail追従
         for (int i = 1; i < segments.Count; i++)
         {
             Transform prev = segments[i - 1];
@@ -116,7 +123,6 @@ public class SnakeFollowMouse : MonoBehaviour
 
         UpdateSnakeCountUI();
     }
-
 
     public void AddTail()
     {
@@ -140,7 +146,6 @@ public class SnakeFollowMouse : MonoBehaviour
         }
         else if (segments.Count == 1)
         {
-            // Headを削る
             Transform last = segments[0];
             segments.RemoveAt(0);
             Destroy(last.gameObject);
@@ -165,12 +170,7 @@ public class SnakeFollowMouse : MonoBehaviour
 
     private void UpdateSnakeCountUI()
     {
-        if (snakeCountText == null)
-        {
-            return;
-        }
-
-        if (head == null)
+        if (snakeCountText == null || head == null)
         {
             return;
         }
@@ -307,13 +307,23 @@ public class SnakeFollowMouse : MonoBehaviour
 
             ClearAllTail();
 
-            for (int i = 0; i < 9; i++) // HP10
+            for (int i = 0; i < 9; i++)
             {
                 AddTail();
             }
 
             UpdateSnakeCountUI();
             isGameOver = false;
+
+            if (progressByDistance != null)
+            {
+                progressByDistance.ResetStartY();
+
+                if (progressController != null)
+                {
+                    progressController.SetProgress(0f);
+                }
+            }
         }
 
         ResetSnakePosition(pos);
